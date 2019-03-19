@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import './App.css';
+
+import Layout from './components/Layout/Layout';
+import Sudoku from './components/Sudoku/Sudoku';
 
 class App extends Component {
   render() {
+
     return (
-      <div className="App">
-       <p>Welcome</p>
+      <div>
+        <Layout>
+          <Sudoku />
+        </Layout>
       </div>
     );
   }

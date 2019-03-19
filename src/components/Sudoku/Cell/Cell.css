@@ -1,0 +1,24 @@
+/* .Cell {
+    display: flex;
+    padding: 0 37%;
+} */
+
+/* .Cell {
+    display: flex;
+    padding: 0 37%;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    box-sizing: border-box;
+} */
+
+.Input{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 1px
+}
+
+.Input:hover {
+    border-color: blue
+}

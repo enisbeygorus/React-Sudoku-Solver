@@ -1,0 +1,22 @@
+.Sudoku {
+    display: flex;
+    padding: 50px 37%;
+    border: 1px solid rgb(255, 255, 255);
+    box-sizing: border-box;
+    flex-direction: column
+    
+}
+
+.Sudoku button {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: rgb(116, 209, 54);
+    outline: none;
+    cursor: pointer;
+    font: inherit;
+    padding: 10px;
+    margin: 50px;
+    font-weight: bold;
+    flex-direction: column;
+    align-self: center
+}
