@@ -33,14 +33,18 @@ class Sudoku extends Component {
                 [0,6,0,0,0,0,2,0,3]],    
             
             loading: false,
-            changeColorArr: []
+            changeColorArr: [],
+            performanceTime: 0,
+            error: ''
     }
     
   
    
    inputHandler = (event, row, column) => {
-    const val = isNaN(parseInt(event.target.value)) === true ? 0 : parseInt(event.target.value)
     
+    const val = isNaN(parseInt(event.target.value)) === true ? 0 : parseInt(event.target.value)
+    console.log(val)
+
     this.setState(prevState => ({
         ...prevState,
         puzzle: prevState.puzzle.map((pz,index) => {      
@@ -112,7 +116,8 @@ transformObjecToArray = (solvedPuzzle) => {
 }
 
  solve = () => {
-    console.log(performanceTimer() + ' millisecond')
+    const performanceTime = performanceTimer()
+    this.setState({performanceTime: performanceTime})
     const transformedPuzzle = this.merged(this.arrayClone(this.state.puzzle)).toString()
     const solvedPuzzle = search(parse_grid(transformedPuzzle))
     this.transformObjecToArray(solvedPuzzle)
@@ -133,6 +138,11 @@ transformObjecToArray = (solvedPuzzle) => {
 
           let spinner = this.state.loading ? <Spinner /> : null
 
+          let timer = null;
+          if(this.state.performanceTime !== 0) {
+              timer = <p style={{marginLeft: '40px', display: 'inline-block'}}>Solved in <strong>{this.state.performanceTime}</strong> millisecond</p>
+          }
+
         return (
             <div className={classes.Sudoku}>
                 {spinner}
@@ -140,7 +150,7 @@ transformObjecToArray = (solvedPuzzle) => {
                 {allCell}
                 </div>
                 <button onClick={() => this.solve()} >Solve the Puzzle</button>
-                <p>asd</p>
+                {timer}
            </div>
           
         )
