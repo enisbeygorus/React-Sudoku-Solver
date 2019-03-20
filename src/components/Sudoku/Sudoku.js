@@ -33,7 +33,8 @@ class Sudoku extends Component {
                 [0,6,0,0,0,0,2,0,3]],    
             
             loading: false,
-            changeColorArr: []
+            changeColorArr: [],
+            performanceTime: 0
     }
     
   
@@ -112,7 +113,8 @@ transformObjecToArray = (solvedPuzzle) => {
 }
 
  solve = () => {
-    console.log(performanceTimer() + ' millisecond')
+    const performanceTime = performanceTimer();
+    this.setState({ performanceTime: performanceTime })
     const transformedPuzzle = this.merged(this.arrayClone(this.state.puzzle)).toString()
     const solvedPuzzle = search(parse_grid(transformedPuzzle))
     this.transformObjecToArray(solvedPuzzle)
@@ -140,7 +142,7 @@ transformObjecToArray = (solvedPuzzle) => {
                 {allCell}
                 </div>
                 <button onClick={() => this.solve()} >Solve the Puzzle</button>
-                <p>asd</p>
+                <p>Solved in <strong>{this.state.performanceTime} millisecond</strong></p>
            </div>
           
         )
