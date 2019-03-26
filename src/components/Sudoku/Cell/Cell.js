@@ -17,7 +17,8 @@ const cell = (props) => {
             className={classes.Input}
             value={emptyString}
             column={props.column}
-            row={props.row} />
+            row={props.row}
+             />
         
     )
    

@@ -7,7 +7,7 @@
     
 }
 
-.Sudoku button {
+.SudokuSolveButton {
     background-color: transparent;
     border: 1px solid #ccc;
     color: rgb(116, 209, 54);
@@ -15,8 +15,37 @@
     cursor: pointer;
     font: inherit;
     padding: 10px;
-    margin: 50px;
+    margin: 20px;
     font-weight: bold;
     flex-direction: column;
     align-self: center
 }
+
+.SudokuSolveButtonDisable {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    outline: none;
+    cursor: pointer;
+    font: inherit;
+    padding: 10px;
+    margin: 20px;
+    font-weight: bold;
+    flex-direction: column;
+    align-self: center;
+    color: #ccc;
+    cursor: not-allowed;
+    
+}
+
+/* .SudokuButton button {
+    display: flex;
+    flex: 1;
+    padding: 2px;
+    margin: 0px 1px;
+    flex-direction: row;
+};
+
+ .SudokuButton {
+    box-sizing: border-box;
+    flex-direction: row;
+};  */

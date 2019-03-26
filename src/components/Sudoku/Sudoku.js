@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import SudokuRow from './SudokuRow/SudokuRow'
 import classes from './Sudoku.css'
 import Spinner from '../Spinner/Spinner';
+import SudokuButtonRow from './SudokuButtonRow/SudokuButtonRow';
 import { parse_grid, search, performanceTimer } from './SudokuAlgorithm';
 
 
@@ -34,14 +35,29 @@ class Sudoku extends Component {
             
             loading: false,
             changeColorArr: [],
-            performanceTime: 0
+            performanceTime: 0,
+            isValid: true
     }
-    
+
+
+    checkValidity(value) {
+        let isValid = true;
+        if(value <= 9 && value >=0) {
+            this.setState({isValid: true})
+            return isValid
+        } else {
+            console.log('input is not valid')
+            this.setState({isValid: false})
+            return !isValid
+        }
+    }
   
    
    inputHandler = (event, row, column) => {
     const val = isNaN(parseInt(event.target.value)) === true ? 0 : parseInt(event.target.value)
-    
+   
+    this.checkValidity(val)
+
     this.setState(prevState => ({
         ...prevState,
         puzzle: prevState.puzzle.map((pz,index) => {      
@@ -112,6 +128,8 @@ transformObjecToArray = (solvedPuzzle) => {
     return arr2;
 }
 
+
+
  solve = () => {
     const performanceTime = performanceTimer();
     this.setState({ performanceTime: performanceTime })
@@ -123,7 +141,10 @@ transformObjecToArray = (solvedPuzzle) => {
 
     render () {
    
-              
+        // let sudokuButton = Array.from(Array(9).keys()).map(i => {
+        //     return <SudokuButton value={i} key={i}/>
+        // })
+      
         let allCell = Array.from(Array(9).keys()).map(i => {
             return <SudokuRow 
                         puzzle={this.state.puzzle}
@@ -133,16 +154,21 @@ transformObjecToArray = (solvedPuzzle) => {
                         changed={this.inputHandler}     />
           })
 
-          let spinner = this.state.loading ? <Spinner /> : null
+          let buttonSwitch =  <button className={classes.SudokuSolveButton} onClick={() => this.solve()} >Solve the Puzzle</button>
+
+          if(!this.state.isValid) {
+              buttonSwitch = <button className={classes.SudokuSolveButtonDisable}  >Puzzle is not Valid !</button>
+          }
 
         return (
             <div className={classes.Sudoku}>
-                {spinner}
+               
                 <div>
                 {allCell}
                 </div>
-                <button onClick={() => this.solve()} >Solve the Puzzle</button>
-                <p>Solved in <strong>{this.state.performanceTime} millisecond</strong></p>
+                <div><SudokuButtonRow /></div>
+                {buttonSwitch}
+                <p style={{margin: '0px 52px', whiteSpace: "nowrap"}}>Solved in <strong>{this.state.performanceTime} millisecond</strong></p>
            </div>
           
         )

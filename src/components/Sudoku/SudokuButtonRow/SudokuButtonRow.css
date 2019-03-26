@@ -1,0 +1,7 @@
+.SudokuButtonRow {
+    display: flex;
+    flex: 1;
+    padding: 0px;
+    margin: 0px ;
+    flex-direction: row;
+}
