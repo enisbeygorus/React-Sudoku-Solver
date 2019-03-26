@@ -11,12 +11,12 @@ class SudokuRow extends Component{
             <div className={classes.SudokuRow}>
           { Array.from(Array(9).keys()).map(i => (
               <Cell 
-                
                 key={i} 
                 row={this.props.row} 
                 column={i}
                 value={this.props.value[this.props.row][i]}
                 changed={(event) => this.props.changed(event, this.props.row, i)}
+                clicked={() => this.props.clicked(this.props.row, i)}
                 />
               )) }
          </div>

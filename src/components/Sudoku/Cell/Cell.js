@@ -12,12 +12,13 @@ const cell = (props) => {
     } 
     return(
         <input
-            onClick={() => console.log(props)}
+            onClick={props.clicked}
             onChange={props.changed}
             className={classes.Input}
             value={emptyString}
             column={props.column}
             row={props.row}
+
              />
         
     )

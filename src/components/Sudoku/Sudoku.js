@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import SudokuRow from './SudokuRow/SudokuRow'
 import classes from './Sudoku.css'
-import Spinner from '../Spinner/Spinner';
 import SudokuButtonRow from './SudokuButtonRow/SudokuButtonRow';
 import { parse_grid, search, performanceTimer } from './SudokuAlgorithm';
 
@@ -36,7 +35,10 @@ class Sudoku extends Component {
             loading: false,
             changeColorArr: [],
             performanceTime: 0,
-            isValid: true
+            isValid: true,
+            tempValue:0,
+            coordinate: [null, null]
+            
     }
 
 
@@ -51,7 +53,31 @@ class Sudoku extends Component {
             return !isValid
         }
     }
+
+    stateRowColumn = (row, column) => {
+        console.log(row,column)
+        const arr = [row, column]
+        this.setState({coordinate: arr})
+    }
   
+    buttonInputHandler = (clickedValue) => {
+        let row = this.state.coordinate[0]
+        let column = this.state.coordinate[1]
+        let val = clickedValue
+
+        this.setState(prevState => ({
+            ...prevState,
+            puzzle: prevState.puzzle.map((pz,index) => {      
+                 if(index === row) {               
+                 pz[column] = val         
+                 return pz    
+                }
+                return pz;
+            })
+        }))
+    }
+
+    
    
    inputHandler = (event, row, column) => {
     const val = isNaN(parseInt(event.target.value)) === true ? 0 : parseInt(event.target.value)
@@ -147,6 +173,7 @@ transformObjecToArray = (solvedPuzzle) => {
       
         let allCell = Array.from(Array(9).keys()).map(i => {
             return <SudokuRow 
+                        clicked={this.stateRowColumn}
                         puzzle={this.state.puzzle}
                         key={i}
                         row={i}
@@ -166,7 +193,7 @@ transformObjecToArray = (solvedPuzzle) => {
                 <div>
                 {allCell}
                 </div>
-                <div><SudokuButtonRow /></div>
+                <div><SudokuButtonRow tempValue={this.state.tempValue} clicked={this.buttonInputHandler}/></div>
                 {buttonSwitch}
                 <p style={{margin: '0px 52px', whiteSpace: "nowrap"}}>Solved in <strong>{this.state.performanceTime} millisecond</strong></p>
            </div>
