@@ -19,6 +19,15 @@
     margin: 0px 1px
 }
 
+.InputSolved{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 1px;
+    color: rgb(78, 236, 78)
+}
+
 .Input:hover {
     border-color: blue
 }

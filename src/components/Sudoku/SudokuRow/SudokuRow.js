@@ -17,6 +17,8 @@ class SudokuRow extends Component{
                 value={this.props.value[this.props.row][i]}
                 changed={(event) => this.props.changed(event, this.props.row, i)}
                 clicked={() => this.props.clicked(this.props.row, i)}
+                solved={this.props.solved}
+                changeColorArr={this.props.changeColorArr}
                 />
               )) }
          </div>

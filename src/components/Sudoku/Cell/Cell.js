@@ -1,28 +1,58 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import classes from './Cell.css'
 
 
-const cell = (props) => {
-
-    let emptyString = '';
+class Cell extends Component {
+    render() {
+     
+       
+       let cell = null
+       let emptyString = '';
     
-    if(props.value !== 0) {
-        emptyString = props.value
-    } 
-    return(
-        <input
-            onClick={props.clicked}
-            onChange={props.changed}
-            className={classes.Input}
-            value={emptyString}
-            column={props.column}
-            row={props.row}
+        if(this.props.value !== 0) {
+        emptyString = this.props.value
+
+           cell = <input
+                className={classes.Input}
+                onClick={this.props.clicked}
+                onChange={this.props.changed}
+                value={emptyString}
+                column={this.props.column}
+                row={this.props.row}
 
              />
-        
-    )
-   
+
+          //console.log(this.props.changeColorArr,'****', this.props.row)
+
+         if(this.props.solved) {
+             for(let i = 0; i < this.props.changeColorArr.length; i+=2 ){
+                 //console.log(this.props.changeColorArr[i], '*****', this.props.changeColorArr[i+1])
+                if(this.props.changeColorArr[i] === this.props.row && this.props.changeColorArr[i+1] === this.props.column)
+                 
+                     
+                    cell = <input
+                    className={classes.InputSolved}
+                    onClick={this.props.clicked}
+                    onChange={this.props.changed}
+                    value={emptyString}
+                    column={this.props.column}
+                    row={this.props.row} />
+                 
+             }
+           
+            }
+    } 
+    return( 
+        cell || <input
+        className={classes.Input}
+        onClick={this.props.clicked}
+        onChange={this.props.changed}
+        value={emptyString}
+        column={this.props.column}
+        row={this.props.row} />
+     )
+    }
 }
 
-export default cell;
+export default Cell;
