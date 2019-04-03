@@ -9,6 +9,26 @@ class Cell extends Component {
        
        let cell = null
        let emptyString = '';
+
+       cell = <input
+            className={classes.Input}
+            onClick={this.props.clicked}
+            onChange={this.props.changed}
+            value={emptyString}
+            column={this.props.column}
+            row={this.props.row}
+
+            />
+
+            if(  this.props.row === 2  || this.props.row === 5){
+                cell =  <input
+                       className={classes.InputBottomBorder}
+                       onClick={this.props.clicked}
+                       onChange={this.props.changed}
+                       value={emptyString}
+                       column={this.props.column}
+                       row={this.props.row} /> 
+            }
     
         if(this.props.value !== 0) {
         emptyString = this.props.value
@@ -22,6 +42,17 @@ class Cell extends Component {
                 row={this.props.row}
 
              />
+
+
+             if(  this.props.row === 2  || this.props.row === 5){
+                cell =  <input
+                       className={classes.InputBottomBorder}
+                       onClick={this.props.clicked}
+                       onChange={this.props.changed}
+                       value={emptyString}
+                       column={this.props.column}
+                       row={this.props.row} /> 
+            }
 
           //console.log(this.props.changeColorArr,'****', this.props.row)
           if(!this.props.isValid){

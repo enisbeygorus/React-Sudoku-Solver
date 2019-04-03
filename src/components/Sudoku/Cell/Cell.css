@@ -12,34 +12,98 @@
 } */
 
 .Input{
-    width: 30px;
-    height: 30px;
+    font-size:18px;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
     text-align: center;
     padding: 0px 3px;
-    margin: 0px 1px
+    margin: 0px 0px;
+    border: 1px black solid;
+}
+
+.Input:nth-child(3){   
+    border-right: 3px black solid; 
+}
+
+.Input:nth-child(6){
+    border-right: 3px black solid
 }
 
 
-
-.InputSolved{
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    padding: 0px 3px;
-    margin: 0px 1px;
-    color: rgb(78, 236, 78)
-}
-
-.InputInValid{
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    padding: 0px 3px;
-    margin: 0px 1px;
-    color: rgb(197, 22, 60);
-    border-color: rgb(197, 22, 60);
-}
 
 .Input:hover {
     border-color: blue
 }
+
+.InputBottomBorder {
+    font-size:18px;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 0px;
+    border: 1px black solid;
+    border-bottom: 3px black solid
+}
+.InputBottomBorder:nth-child(3){
+    border-right: 3px black solid
+}
+
+.InputBottomBorder:nth-child(6){
+    border-right: 3px black solid
+}
+
+.InputSolved{
+    font-size:18px;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 0px;
+    border: 1px black solid;
+    color: rgb(78, 236, 78);
+   
+}
+
+.InputSolved:nth-child(3){
+    border-right: 3px black solid
+}
+
+.InputSolved:nth-child(6){
+    border-right: 3px black solid
+}
+
+.InputInValid{
+    font-size:18px;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 0px;
+    color: rgb(197, 22, 60);
+    border: 1px red solid;
+    border-color: rgb(197, 22, 60);
+}
+
+.InputInValid:nth-child(3){
+    border-right: 3px black solid
+}
+
+.InputInValid:nth-child(6){
+    border-right: 3px black solid
+}
+
+.InputInValid:hover {
+    border-color: rgb(197, 22, 60)
+}
+
+.InputInValid:focus {
+    outline: none !important;
+    border:1px solid red;
+    box-shadow: 0 0 10px #719ECE;
+}
+

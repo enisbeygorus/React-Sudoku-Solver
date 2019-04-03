@@ -1,4 +1,6 @@
 .Button {
+    font-size: 18px;
+    font-weight: bold;
     width: 36px;
     height: 32px;
     text-align: center;

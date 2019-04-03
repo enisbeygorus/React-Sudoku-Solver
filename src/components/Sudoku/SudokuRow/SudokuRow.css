@@ -1,8 +1,7 @@
 .SudokuRow {
     display: flex;
     flex: 1;
-    padding: 2px;
-    margin: 0px 1px;
+    
     flex-direction: row;
 }
 

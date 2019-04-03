@@ -3,6 +3,7 @@ import SudokuRow from './SudokuRow/SudokuRow'
 import classes from './Sudoku.css'
 import SudokuButtonRow from './SudokuButtonRow/SudokuButtonRow';
 import { parse_grid, search, performanceTimer } from './SudokuAlgorithm';
+import { puzzles } from './RandomSudokuPuzzle'
 
 
 class Sudoku extends Component {
@@ -255,7 +256,7 @@ class Sudoku extends Component {
 
 
     render () {
-   
+        console.log(puzzles[0])
         // let sudokuButton = Array.from(Array(9).keys()).map(i => {
         //     return <SudokuButton value={i} key={i}/>
         // })
