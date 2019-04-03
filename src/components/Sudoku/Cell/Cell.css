@@ -19,6 +19,8 @@
     margin: 0px 1px
 }
 
+
+
 .InputSolved{
     width: 30px;
     height: 30px;
@@ -26,6 +28,16 @@
     padding: 0px 3px;
     margin: 0px 1px;
     color: rgb(78, 236, 78)
+}
+
+.InputInValid{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 1px;
+    color: rgb(197, 22, 60);
+    border-color: rgb(197, 22, 60);
 }
 
 .Input:hover {

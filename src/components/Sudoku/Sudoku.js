@@ -39,14 +39,12 @@ class Sudoku extends Component {
             coordinate: [null, null],
             duplicateError: false,
             displayError:[],
-            solved: false
+            displayRed:[],
+            solved: false,
+            turnToRedBorder: []
             
     }
-    
-    componentDidUpdate(previousProps, previousState) {
-       //this.checkStateForDuplicate();
-
-    }
+   
 
     checkStateForDuplicate = () => {
         
@@ -55,6 +53,11 @@ class Sudoku extends Component {
         let emptyArr = [];
         let displayError = [];
         let isValid = true;
+        let inValidArr = [];
+
+
+
+        let tempArr = [];
 
         for (let i = 0; i < 9; i++) {
            for (let j = 0; j < 8; j++) {
@@ -62,7 +65,8 @@ class Sudoku extends Component {
                     if(coppyPuzzle[i][j] === coppyPuzzle[i][k] && coppyPuzzle[i][j] !== 0){
                         if(!displayError.includes('row'))  displayError.push('row') 
                         isValid = false
-                        
+                        console.log(i,j)
+                        inValidArr.push(i,j,i,k)
                         console.log('there is same row',coppyPuzzle[i][j] , coppyPuzzle[i][k])
                     }
                }
@@ -75,7 +79,7 @@ class Sudoku extends Component {
                      if(coppyPuzzle[j][i] === coppyPuzzle[k][i] && coppyPuzzle[j][i] !== 0) {
                         if(!displayError.includes('column'))  displayError.push('column')
                          isValid = false
-                         
+                         inValidArr.push(j,i,k,i)
                          console.log('there is same in column', coppyPuzzle[j][i] , coppyPuzzle[k][i])
                      }
                 }
@@ -85,11 +89,14 @@ class Sudoku extends Component {
        
            for (let i = 0; i < 9; i += 3) {
                emptyArr = []
+               tempArr = []
                for( let j = 0; j < 9; j += 3) {
                   for( let t = i; t < i + 3; t++) {
                       for(let k = j ; k < j + 3; k++) {     
                           emptyArr.push(coppyPuzzle[t][k])
+                          tempArr.push(t,k)
                       }
+                      
                   }
                   for(let n = 0; n < 8; n++){
                       for(let m = n + 1; m < 9; m++) {
@@ -97,15 +104,17 @@ class Sudoku extends Component {
                             if(!displayError.includes('square'))  displayError.push('square')
                              isValid = false
                              
+                             inValidArr.push(tempArr[(2*m)], tempArr[(2*m+1)])
+                             
                              console.log('there is same in square', emptyArr)
                           }
                       }
                   }
                   emptyArr = []
+                  tempArr = []
                }
-           }  
-             this.setState({isValid: isValid, displayError: displayError})
-        
+           }   
+             this.setState({isValid: isValid, displayError: displayError, turnToRedBorder: inValidArr})   
     }
 
    
@@ -139,9 +148,7 @@ class Sudoku extends Component {
         let val = clickedValue
 
         this.checkValidity(val);
-        //this.checkNumberUsed(val, row, column)
-        
-
+   
         this.setState(prevState => ({
             ...prevState,
             puzzle: prevState.puzzle.map((pz,index) => {      
@@ -159,96 +166,91 @@ class Sudoku extends Component {
 
     
    
-   inputHandler = (event, row, column) => {
-    const val = isNaN(parseInt(event.target.value)) === true ? 0 : parseInt(event.target.value)
-   
-    this.checkValidity(val)
+    inputHandler = (event, row, column) => {
+        const val = isNaN(parseInt(event.target.value)) === true ? 0 : parseInt(event.target.value)
     
-    //this.checkNumberUsed(val, row, column)
+        this.checkValidity(val)
     
-
-    this.setState(prevState => ({
-        ...prevState,
-        puzzle: prevState.puzzle.map((pz,index) => {      
-             if(index === row) {               
-             pz[column] = val         
-             return pz    
-            }
-            return pz;
-        })
-    }),
-    this.checkStateForDuplicate)
-    
-   
+        this.setState(prevState => ({
+            ...prevState,
+            puzzle: prevState.puzzle.map((pz,index) => {      
+                if(index === row) {               
+                pz[column] = val         
+                return pz    
+                }
+                return pz;
+            })
+        }),
+        this.checkStateForDuplicate) 
 }
 
 
 
-arrayClone = ( arr ) => {
+    arrayClone = ( arr ) => {
 
-    var i, copy;
+        var i, copy;
 
-    if( Array.isArray( arr ) ) {
-        copy = arr.slice( 0 );
-        for( i = 0; i < copy.length; i++ ) {
-            copy[ i ] = this.arrayClone( copy[ i ] );
+        if( Array.isArray( arr ) ) {
+            copy = arr.slice( 0 );
+            for( i = 0; i < copy.length; i++ ) {
+                copy[ i ] = this.arrayClone( copy[ i ] );
+            }
+            return copy;
+        } else {
+            return arr;
         }
-        return copy;
-    } else {
-        return arr;
-    }
 }
 
   
-  takeIndexToMakeGreen = (puzzle) => {
-    const dataChangeColor = [];
-    const copyPuzzle = this.arrayClone(this.state.copyPuzzle)
-    for(let i = 0 ; i < copyPuzzle.length; i++) {
-        for(let j = 0; j < puzzle.length; j++) {
-            if(puzzle[i][j] !== copyPuzzle[i][j]) {
-                dataChangeColor.push(i,j)
+     takeIndexToMakeGreen = (puzzle) => {
+        const dataChangeColor = [];
+        const copyPuzzle = this.arrayClone(this.state.copyPuzzle)
+        for(let i = 0 ; i < copyPuzzle.length; i++) {
+            for(let j = 0; j < puzzle.length; j++) {
+                if(puzzle[i][j] !== copyPuzzle[i][j]) {
+                    dataChangeColor.push(i,j)
+                }
             }
         }
-    }
-    console.log(dataChangeColor)
-      return dataChangeColor
+        console.log(dataChangeColor)
+        return dataChangeColor
   }
   
- merged = (arr) => {
-     let merged = [].concat.apply([], arr);
-         return merged
-    }
-
-transformObjecToArray = (solvedPuzzle) => {
-    let counter = 0;
-    let arr = [];
-    let arr2= [];
-    let solved = true;
-    console.log(solvedPuzzle)
-    for(let i in solvedPuzzle){
-        if(counter === 9) {
-            counter = 0;
-            arr2.push(arr)
-            arr = [];
+    merged = (arr) => {
+        let merged = [].concat.apply([], arr);
+            return merged
         }
-        arr.push(parseInt(solvedPuzzle[i]))
-        counter++
-    }
-    arr2.push(arr)
-    arr = this.takeIndexToMakeGreen(arr2);
-    this.setState({puzzle: arr2, changeColorArr: arr, solved: solved})
-    return arr2;
+
+    transformObjecToArray = (solvedPuzzle) => {
+            let counter = 0;
+            let arr = [];
+            let arr2= [];
+            let solved = true;
+            console.log(solvedPuzzle)
+            for(let i in solvedPuzzle){
+                if(counter === 9) {
+                    counter = 0;
+                    arr2.push(arr)
+                    arr = [];
+                }
+                arr.push(parseInt(solvedPuzzle[i]))
+                counter++
+            }
+            arr2.push(arr)
+            arr = this.takeIndexToMakeGreen(arr2);
+            this.setState({puzzle: arr2, changeColorArr: arr, solved: solved})
+            return arr2;
 }
 
 
 
- solve = () => {
-    const performanceTime = performanceTimer();
-    this.setState({ performanceTime: performanceTime })
-    const transformedPuzzle = this.merged(this.arrayClone(this.state.puzzle)).toString()
-    const solvedPuzzle = search(parse_grid(transformedPuzzle))
-    this.setState()
-    this.transformObjecToArray(solvedPuzzle)
+    solve = () => {
+        const performanceTime = performanceTimer();
+        this.setState({ performanceTime: performanceTime })
+        const transformedPuzzle = this.merged(this.arrayClone(this.state.puzzle)).toString()
+        const solvedPuzzle = search(parse_grid(transformedPuzzle))
+        this.setState()
+        this.transformObjecToArray(solvedPuzzle)
  }
 
 
@@ -290,7 +292,9 @@ transformObjecToArray = (solvedPuzzle) => {
                         value={this.state.puzzle}
                         changed={this.inputHandler}
                         solved={this.state.solved}
-                        changeColorArr={this.state.changeColorArr}    />
+                        changeColorArr={this.state.changeColorArr}
+                        turnToRedBorder={this.state.turnToRedBorder}
+                        isValid={this.state.isValid}    />
           })
 
           let buttonSwitch =  <button className={classes.SudokuSolveButton} onClick={() => this.solve()} >Solve the Puzzle</button>

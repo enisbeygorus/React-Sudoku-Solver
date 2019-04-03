@@ -24,6 +24,19 @@ class Cell extends Component {
              />
 
           //console.log(this.props.changeColorArr,'****', this.props.row)
+          if(!this.props.isValid){
+              for(let i = 0; i< this.props.turnToRedBorder.length; i+=2){
+                if(this.props.turnToRedBorder[i] === this.props.row && this.props.turnToRedBorder[i+1] === this.props.column){
+                    cell = <input
+                        className={classes.InputInValid}
+                        onClick={this.props.clicked}
+                        onChange={this.props.changed}
+                        value={emptyString}
+                        column={this.props.column}
+                        row={this.props.row} />
+                }
+              }
+          }
 
          if(this.props.solved) {
              for(let i = 0; i < this.props.changeColorArr.length; i+=2 ){
@@ -32,12 +45,12 @@ class Cell extends Component {
                  
                      
                     cell = <input
-                    className={classes.InputSolved}
-                    onClick={this.props.clicked}
-                    onChange={this.props.changed}
-                    value={emptyString}
-                    column={this.props.column}
-                    row={this.props.row} />
+                        className={classes.InputSolved}
+                        onClick={this.props.clicked}
+                        onChange={this.props.changed}
+                        value={emptyString}
+                        column={this.props.column}
+                        row={this.props.row} />
                  
              }
            
