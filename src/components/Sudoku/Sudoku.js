@@ -105,8 +105,8 @@ class Sudoku extends Component {
                             if(!displayError.includes('square'))  displayError.push('square')
                              isValid = false
                              
-                             inValidArr.push(tempArr[(2*m)], tempArr[(2*m+1)])
-                             
+                             inValidArr.push(tempArr[(2*m)], tempArr[(2*m+1)],tempArr[(2*n)], tempArr[(2*n+1)])
+                             console.log(emptyArr[n], '****',tempArr[(2*m)], tempArr[(2*m+1)],'***',tempArr[(2*n)], tempArr[(2*n+1)])
                              console.log('there is same in square', emptyArr)
                           }
                       }
@@ -115,6 +115,7 @@ class Sudoku extends Component {
                   tempArr = []
                }
            }   
+           console.log(inValidArr)
              this.setState({isValid: isValid, displayError: displayError, turnToRedBorder: inValidArr})   
     }
 
@@ -256,7 +257,7 @@ class Sudoku extends Component {
 
 
     render () {
-        console.log(puzzles[0])
+        
         // let sudokuButton = Array.from(Array(9).keys()).map(i => {
         //     return <SudokuButton value={i} key={i}/>
         // })
