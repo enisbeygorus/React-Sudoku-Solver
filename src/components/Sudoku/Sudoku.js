@@ -64,11 +64,11 @@ class Sudoku extends Component {
            for (let j = 0; j < 8; j++) {
                for(let k = j + 1; k < 9; k++) {
                     if(coppyPuzzle[i][j] === coppyPuzzle[i][k] && coppyPuzzle[i][j] !== 0){
-                        if(!displayError.includes('row'))  displayError.push('row') 
+                        if(!displayError.includes('Row'))  displayError.push('Row') 
                         isValid = false
                         console.log(i,j)
                         inValidArr.push(i,j,i,k)
-                        console.log('there is same row',coppyPuzzle[i][j] , coppyPuzzle[i][k])
+                        console.log('there is same Row',coppyPuzzle[i][j] , coppyPuzzle[i][k])
                     }
                }
            }
@@ -78,10 +78,10 @@ class Sudoku extends Component {
             for (let j = 0; j < 8; j++) {
                 for(let k = j + 1; k < 9; k++) {
                      if(coppyPuzzle[j][i] === coppyPuzzle[k][i] && coppyPuzzle[j][i] !== 0) {
-                        if(!displayError.includes('column'))  displayError.push('column')
+                        if(!displayError.includes('Column'))  displayError.push('Column')
                          isValid = false
                          inValidArr.push(j,i,k,i)
-                         console.log('there is same in column', coppyPuzzle[j][i] , coppyPuzzle[k][i])
+                         console.log('there is same in Column', coppyPuzzle[j][i] , coppyPuzzle[k][i])
                      }
                 }
             }
@@ -102,7 +102,7 @@ class Sudoku extends Component {
                   for(let n = 0; n < 8; n++){
                       for(let m = n + 1; m < 9; m++) {
                           if(emptyArr[n] !== 0 && emptyArr[n] === emptyArr[m]) {
-                            if(!displayError.includes('square'))  displayError.push('square')
+                            if(!displayError.includes('Square'))  displayError.push('Square')
                              isValid = false
                              
                              inValidArr.push(tempArr[(2*m)], tempArr[(2*m+1)],tempArr[(2*n)], tempArr[(2*n+1)])
@@ -229,19 +229,24 @@ class Sudoku extends Component {
             let arr2= [];
             let solved = true;
             console.log(solvedPuzzle)
-            for(let i in solvedPuzzle){
-                if(counter === 9) {
-                    counter = 0;
-                    arr2.push(arr)
-                    arr = [];
+           try {
+                for(let i in solvedPuzzle){
+                    if(counter === 9) {
+                        counter = 0;
+                        arr2.push(arr)
+                        arr = [];
+                    }
+                    arr.push(parseInt(solvedPuzzle[i]))
+                    counter++
                 }
-                arr.push(parseInt(solvedPuzzle[i]))
-                counter++
+                arr2.push(arr)
+                arr = this.takeIndexToMakeGreen(arr2);
+                this.setState({puzzle: arr2, changeColorArr: arr, solved: solved})
+                return arr2;
+        } 
+             catch (err) {
+                console.log('there is error')
             }
-            arr2.push(arr)
-            arr = this.takeIndexToMakeGreen(arr2);
-            this.setState({puzzle: arr2, changeColorArr: arr, solved: solved})
-            return arr2;
 }
 
 
@@ -264,13 +269,13 @@ class Sudoku extends Component {
         let errorParagraf = null;
 
         if(this.state.displayError.length === 1) {
-            errorParagraf = <p style={{whiteSpace: "nowrap"}}><strong>ERROR!: There is duplicate in same {this.state.displayError[0]}</strong></p>
+            errorParagraf = <p style={{whiteSpace: "nowrap"}}><strong>ERROR!: Duplicate in same {this.state.displayError[0]}</strong></p>
         }
 
         if(this.state.displayError.length === 2) {
             errorParagraf = <p style={{whiteSpace: "nowrap"}}>
                             <strong>
-                            ERROR!: There is duplicate in same {this.state.displayError[0]} and {this.state.displayError[1]}
+                            ERROR!: Duplicate in same {this.state.displayError[0]} and {this.state.displayError[1]}
                                 </strong>
                             </p>
         }
@@ -278,7 +283,7 @@ class Sudoku extends Component {
         if(this.state.displayError.length === 3) {
             errorParagraf = <p style={{whiteSpace: "nowrap"}}>
                             <strong>
-                            ERROR!: There is duplicate in same {this.state.displayError[0]} and {this.state.displayError[1]} and {this.state.displayError[2]}
+                            ERROR!: Duplicate in same {this.state.displayError[0]} and {this.state.displayError[1]} and {this.state.displayError[2]}
                                 </strong>
                             </p>
         }
@@ -306,6 +311,7 @@ class Sudoku extends Component {
           }
 
         return (
+           
             <div className={classes.Sudoku}>
                
                 <div>
