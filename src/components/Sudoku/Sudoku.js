@@ -42,7 +42,8 @@ class Sudoku extends Component {
             displayError:[],
             displayRed:[],
             solved: false,
-            turnToRedBorder: []
+            turnToRedBorder: [],
+            inValidPuzzle: false
             
     }
    
@@ -241,11 +242,12 @@ class Sudoku extends Component {
                 }
                 arr2.push(arr)
                 arr = this.takeIndexToMakeGreen(arr2);
-                this.setState({puzzle: arr2, changeColorArr: arr, solved: solved})
+                this.setState({puzzle: arr2, changeColorArr: arr, solved: solved, inValidPuzzle: false})
                 return arr2;
         } 
              catch (err) {
                 console.log('there is error')
+                this.setState({inValidPuzzle: true})
             }
 }
 
@@ -267,6 +269,18 @@ class Sudoku extends Component {
         //     return <SudokuButton value={i} key={i}/>
         // })
         let errorParagraf = null;
+        
+        let inValidParagraf = <p style={{margin: '10px 20%'}}></p>;
+
+        let solvedParagraf = null
+
+        if(this.state.solved) {
+            solvedParagraf = <p style={{margin: '0px 52px', whiteSpace: "nowrap"}}>Solved in <strong>{this.state.performanceTime} millisecond</strong></p>
+        }
+
+        if(this.state.inValidPuzzle){
+            inValidParagraf = <p style={{margin: '0px 20% 10px 20%' , whiteSpace: "nowrap"}}><strong>Puzzle is not valid, Check inputs!</strong></p>
+        } 
 
         if(this.state.displayError.length === 1) {
             errorParagraf = <p style={{whiteSpace: "nowrap"}}><strong>ERROR!: Duplicate in same {this.state.displayError[0]}</strong></p>
@@ -313,14 +327,14 @@ class Sudoku extends Component {
         return (
            
             <div className={classes.Sudoku}>
-               
+               {inValidParagraf}
                 <div>
                 {allCell}
                 </div>
                 <div><SudokuButtonRow tempValue={this.state.tempValue} clicked={this.buttonInputHandler}/></div>
                 {errorParagraf}
                 {buttonSwitch}
-                <p style={{margin: '0px 52px', whiteSpace: "nowrap"}}>Solved in <strong>{this.state.performanceTime} millisecond</strong></p>
+                {solvedParagraf}
            </div>
           
         )
