@@ -65,14 +65,35 @@
     margin: 0px 0px;
     border: 1px black solid;
     color: rgb(78, 236, 78);
-   
 }
+
 
 .InputSolved:nth-child(3){
     border-right: 3px black solid
 }
 
 .InputSolved:nth-child(6){
+    border-right: 3px black solid
+}
+
+.InputSolvedBorder{
+    font-size:18px;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 0px;
+    border: 1px black solid;
+    color: rgb(78, 236, 78);
+    border-bottom: 3px black solid
+}
+
+.InputSolvedBorder:nth-child(3){
+    border-right: 3px black solid
+}
+
+.InputSolvedBorder:nth-child(6){
     border-right: 3px black solid
 }
 
