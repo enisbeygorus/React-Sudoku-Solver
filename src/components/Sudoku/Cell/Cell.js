@@ -54,6 +54,8 @@ class Cell extends Component {
                        row={this.props.row} /> 
             }
 
+            
+
           //console.log(this.props.changeColorArr,'****', this.props.row)
           if(!this.props.isValid){
               for(let i = 0; i< this.props.turnToRedBorder.length; i+=2){
@@ -82,7 +84,9 @@ class Cell extends Component {
                         column={this.props.column}
                         row={this.props.row} />
 
-                        if(  this.props.row === 2  || this.props.row === 5){
+                        
+
+                        if(  (this.props.row === 2  || this.props.row === 5) && (this.props.changeColorArr[i] === this.props.row && this.props.changeColorArr[i+1] === this.props.column)){
                             cell =  <input
                                    className={classes.InputSolvedBorder}
                                    onClick={this.props.clicked}
@@ -90,7 +94,9 @@ class Cell extends Component {
                                    value={emptyString}
                                    column={this.props.column}
                                    row={this.props.row} /> 
-                        }
+                        } 
+                        
+                       
                  
              }
            

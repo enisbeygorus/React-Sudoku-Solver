@@ -64,7 +64,7 @@
     padding: 0px 3px;
     margin: 0px 0px;
     border: 1px black solid;
-    color: rgb(78, 236, 78);
+    color: rgb(58, 199, 58);
 }
 
 
@@ -85,7 +85,7 @@
     padding: 0px 3px;
     margin: 0px 0px;
     border: 1px black solid;
-    color: rgb(78, 236, 78);
+    color: rgb(58, 199, 58);
     border-bottom: 3px black solid
 }
 
@@ -96,6 +96,8 @@
 .InputSolvedBorder:nth-child(6){
     border-right: 3px black solid
 }
+
+
 
 .InputInValid{
     font-size:18px;

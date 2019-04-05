@@ -64,7 +64,7 @@ let t0 = performance.now();
             grid2 += grid.charAt(c);
         var values = {};
         for (var s in squares)
-          values[squares[s]] = digits;
+          values[squares[s]] = digits;       
         for (var s in squares)
           if (digits.indexOf(grid2.charAt(s)) >= 0 && !assign(values, squares[s], grid2.charAt(s)))
             return false;

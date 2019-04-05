@@ -6,7 +6,7 @@ import { parse_grid, search, performanceTimer } from './SudokuAlgorithm';
 import { puzzles } from './RandomSudokuPuzzle'
 
 
-class Sudoku extends Component {
+class PlaySudoku extends Component {
 
     
         state={
@@ -254,14 +254,12 @@ class Sudoku extends Component {
 
 
     solve = () => {
-        const copyArray = this.arrayClone(this.state.puzzle)
-        
         const performanceTime = performanceTimer();
         this.setState({ performanceTime: performanceTime })
         const transformedPuzzle = this.merged(this.arrayClone(this.state.puzzle)).toString()
         const solvedPuzzle = search(parse_grid(transformedPuzzle))
-        this.setState({copyPuzzle: copyArray},() => this.transformObjecToArray(solvedPuzzle) )
-        //this.transformObjecToArray(solvedPuzzle)
+        this.setState()
+        this.transformObjecToArray(solvedPuzzle)
  }
 
 
@@ -275,8 +273,6 @@ class Sudoku extends Component {
         let inValidParagraf = <p style={{margin: '10px 20%'}}></p>;
 
         let solvedParagraf = null
-
-        let buttonSwitch = null
 
         if(this.state.solved) {
             solvedParagraf = <p style={{margin: '0px 52px', whiteSpace: "nowrap"}}>Solved in <strong>{this.state.performanceTime} millisecond</strong></p>
@@ -322,10 +318,7 @@ class Sudoku extends Component {
                         isValid={this.state.isValid}    />
           })
 
-          if(!this.state.solved) {
-            buttonSwitch =  <button className={classes.SudokuSolveButton} onClick={() => this.solve()} >Solve the Puzzle</button>
-          }
-           
+          let buttonSwitch =  <button className={classes.SudokuSolveButton} onClick={() => this.solve()} >Solve the Puzzle</button>
 
           if(!this.state.isValid) {
               buttonSwitch = <button className={classes.SudokuSolveButtonDisable}  >Puzzle is not Valid !</button>
@@ -349,4 +342,4 @@ class Sudoku extends Component {
 }
 
 
-export default Sudoku;
+export default PlaySudoku;
