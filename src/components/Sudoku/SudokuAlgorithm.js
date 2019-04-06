@@ -135,7 +135,7 @@ let t0 = performance.now();
           return values;
         for (var d = 0; d < values[sq].length; d++){
           var res = search(assign(dup(values), sq, values[sq].charAt(d)));
-          console.log('----',res)
+          //console.log('----',res)
           if (res)
             return res;
         }

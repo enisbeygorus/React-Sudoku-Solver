@@ -6,6 +6,8 @@ import { parse_grid, search, performanceTimer } from './SudokuAlgorithm';
 import { puzzles } from './RandomSudokuPuzzle'
 
 
+
+
 class Sudoku extends Component {
 
     
@@ -37,13 +39,14 @@ class Sudoku extends Component {
             performanceTime: 0,
             isValid: true,
             tempValue:0,
-            coordinate: [null, null],
+            coordinate: [],
             duplicateError: false,
             displayError:[],
             displayRed:[],
             solved: false,
             turnToRedBorder: [],
-            inValidPuzzle: false
+            inValidPuzzle: false,
+            playGame: false
             
     }
    
@@ -319,7 +322,8 @@ class Sudoku extends Component {
                         solved={this.state.solved}
                         changeColorArr={this.state.changeColorArr}
                         turnToRedBorder={this.state.turnToRedBorder}
-                        isValid={this.state.isValid}    />
+                        isValid={this.state.isValid}
+                        coordinate={this.state.coordinate}    />
           })
 
           if(!this.state.solved) {

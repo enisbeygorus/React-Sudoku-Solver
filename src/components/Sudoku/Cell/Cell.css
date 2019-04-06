@@ -11,6 +11,48 @@
     box-sizing: border-box;
 } */
 
+.DifferentInputFont {
+    font-size:20px;
+    color: rgb(0, 174, 255);
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 0px;
+    border: 1px black solid;
+}
+
+.DifferentInputFont:nth-child(3){   
+    border-right: 3px black solid; 
+}
+
+.DifferentInputFont:nth-child(6){
+    border-right: 3px black solid
+}
+
+
+.DifferentInputFontBottom {
+    font-size:20px;
+    color: rgb(0, 174, 255);
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 0px;
+    border: 1px black solid;
+    border-bottom: 3px black solid
+}
+
+.DifferentInputFontBottom:nth-child(3){   
+    border-right: 3px black solid; 
+}
+
+.DifferentInputFontBottom:nth-child(6){
+    border-right: 3px black solid
+}
+
 .Input{
     font-size:18px;
     font-weight: bold;
@@ -21,6 +63,7 @@
     margin: 0px 0px;
     border: 1px black solid;
 }
+
 
 .Input:nth-child(3){   
     border-right: 3px black solid; 
@@ -130,3 +173,29 @@
     box-shadow: 0 0 10px #719ECE;
 }
 
+.InputInValidBottom{
+    font-size:18px;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 0px 3px;
+    margin: 0px 0px;
+    color: rgb(197, 22, 60);
+    border: 1px red solid;
+    border-bottom: 3px rgb(197, 22, 60) solid
+}
+
+.InputInValidBottom:nth-child(3){
+    border-right: 3px  rgb(197, 22, 60) solid
+}
+
+.InputInValidBottom:nth-child(6){
+    border-right: 3px  rgb(197, 22, 60) solid
+}
+
+.InputInValidBottom:focus {
+    outline: none !important;
+    border:1px solid red;
+    box-shadow: 0 0 10px #719ECE;
+}

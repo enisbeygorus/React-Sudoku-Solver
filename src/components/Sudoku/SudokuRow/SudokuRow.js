@@ -7,6 +7,7 @@ class SudokuRow extends Component{
 
     
     render () {
+      
         return(
             <div className={classes.SudokuRow}>
           { Array.from(Array(9).keys()).map(i => (
@@ -21,6 +22,9 @@ class SudokuRow extends Component{
                 changeColorArr={this.props.changeColorArr}
                 turnToRedBorder={this.props.turnToRedBorder}
                 isValid={this.props.isValid}
+                playGame={this.props.playGame}
+                arrayOfReadOnly={this.props.arrayOfReadOnly}
+                coordinate={this.props.coordinate}
                 />
               )) }
          </div>

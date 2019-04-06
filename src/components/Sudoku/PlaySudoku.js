@@ -7,7 +7,8 @@ import { puzzles } from './RandomSudokuPuzzle'
 
 
 class PlaySudoku extends Component {
-
+   
+  
     
         state={
             puzzle:
@@ -43,10 +44,64 @@ class PlaySudoku extends Component {
             displayRed:[],
             solved: false,
             turnToRedBorder: [],
-            inValidPuzzle: false
+            inValidPuzzle: false,
+            playGame: true,
+            arrayOfReadOnly: []
             
     }
+
+    componentDidMount() {
+        const tempPuzzle = this.stringToArray();
+        const tempReadOnlyArr = this.takeIndexToReadOnly(tempPuzzle);
+        
+        if(this.state.arrayOfReadOnly !== tempReadOnlyArr){
+            this.setState({arrayOfReadOnly: tempReadOnlyArr})
+        }
+
+        if(this.state.puzzle !== tempPuzzle && this.state.copyPuzzle !== tempPuzzle) {
+            this.setState({puzzle: tempPuzzle, copyPuzzle: tempPuzzle })
+        }
+    }
+
+    
+
    
+    stringToArray = () => {
+        const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)]
+        
+      
+        let tempStr;
+        let tempArr = [];
+        let tempArr2 = [];
+        for(let i = 0; i < 81; i+= 9) {
+            for(let j = i; j < i + 9; j++ ){
+                tempStr = randomPuzzle.substr(j, 1)
+                if(tempStr === '.'){
+                    tempStr = 0
+                }
+                tempArr.push(parseInt(tempStr))
+            }
+            tempArr2.push(tempArr);
+            tempArr = [];       
+        } 
+      
+        return tempArr2
+
+    }
+
+    takeIndexToReadOnly = (array) => {
+        let tempArr = []
+        
+        for(let i = 0; i < 9 ; i++) {
+            for(let j = 0; j < 9; j++){
+                if(array[i][j] !== 0){
+                    tempArr.push(i,j)
+                }
+            }
+        }
+
+        return tempArr
+    }
 
     checkStateForDuplicate = () => {
         
@@ -67,9 +122,9 @@ class PlaySudoku extends Component {
                     if(coppyPuzzle[i][j] === coppyPuzzle[i][k] && coppyPuzzle[i][j] !== 0){
                         if(!displayError.includes('Row'))  displayError.push('Row') 
                         isValid = false
-                        console.log(i,j)
+                       
                         inValidArr.push(i,j,i,k)
-                        console.log('there is same Row',coppyPuzzle[i][j] , coppyPuzzle[i][k])
+                        
                     }
                }
            }
@@ -82,7 +137,7 @@ class PlaySudoku extends Component {
                         if(!displayError.includes('Column'))  displayError.push('Column')
                          isValid = false
                          inValidArr.push(j,i,k,i)
-                         console.log('there is same in Column', coppyPuzzle[j][i] , coppyPuzzle[k][i])
+                         
                      }
                 }
             }
@@ -107,8 +162,7 @@ class PlaySudoku extends Component {
                              isValid = false
                              
                              inValidArr.push(tempArr[(2*m)], tempArr[(2*m+1)],tempArr[(2*n)], tempArr[(2*n+1)])
-                             console.log(emptyArr[n], '****',tempArr[(2*m)], tempArr[(2*m+1)],'***',tempArr[(2*n)], tempArr[(2*n+1)])
-                             console.log('there is same in square', emptyArr)
+                            
                           }
                       }
                   }
@@ -116,7 +170,7 @@ class PlaySudoku extends Component {
                   tempArr = []
                }
            }   
-           console.log(inValidArr)
+          
              this.setState({isValid: isValid, displayError: displayError, turnToRedBorder: inValidArr})   
     }
 
@@ -206,8 +260,13 @@ class PlaySudoku extends Component {
 
   
      takeIndexToMakeGreen = (puzzle) => {
+         
         const dataChangeColor = [];
         const copyPuzzle = this.arrayClone(this.state.copyPuzzle)
+
+        console.log(puzzle)
+         console.log(copyPuzzle)
+
         for(let i = 0 ; i < copyPuzzle.length; i++) {
             for(let j = 0; j < puzzle.length; j++) {
                 if(puzzle[i][j] !== copyPuzzle[i][j]) {
@@ -264,10 +323,10 @@ class PlaySudoku extends Component {
 
 
     render () {
+       
+        this.stringToArray(puzzles[0]);
         
-        // let sudokuButton = Array.from(Array(9).keys()).map(i => {
-        //     return <SudokuButton value={i} key={i}/>
-        // })
+        
         let errorParagraf = null;
         
         let inValidParagraf = <p style={{margin: '10px 20%'}}></p>;
@@ -315,14 +374,16 @@ class PlaySudoku extends Component {
                         solved={this.state.solved}
                         changeColorArr={this.state.changeColorArr}
                         turnToRedBorder={this.state.turnToRedBorder}
-                        isValid={this.state.isValid}    />
+                        isValid={this.state.isValid}
+                        playGame={this.state.playGame}
+                        arrayOfReadOnly={this.state.arrayOfReadOnly}    />
           })
 
-          let buttonSwitch =  <button className={classes.SudokuSolveButton} onClick={() => this.solve()} >Solve the Puzzle</button>
+          //let buttonSwitch =  <button className={classes.SudokuSolveButton} onClick={() => this.solve()} >Solve the Puzzle</button>
 
-          if(!this.state.isValid) {
-              buttonSwitch = <button className={classes.SudokuSolveButtonDisable}  >Puzzle is not Valid !</button>
-          }
+        //   if(!this.state.isValid) {
+        //       buttonSwitch = <button className={classes.SudokuSolveButtonDisable}  >Puzzle is not Valid !</button>
+        //   }
 
         return (
            
@@ -333,8 +394,8 @@ class PlaySudoku extends Component {
                 </div>
                 <div><SudokuButtonRow tempValue={this.state.tempValue} clicked={this.buttonInputHandler}/></div>
                 {errorParagraf}
-                {buttonSwitch}
                 {solvedParagraf}
+                <p>test paragraf</p>
            </div>
           
         )
