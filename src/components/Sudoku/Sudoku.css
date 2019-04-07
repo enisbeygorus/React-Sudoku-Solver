@@ -1,6 +1,6 @@
 .Sudoku {
     display: flex;
-    padding: 50px 37%;
+    padding: 50px 37% 10px 37%;
     border: 1px solid rgb(255, 255, 255);
     box-sizing: border-box;
     flex-direction: column
@@ -8,6 +8,7 @@
 }
 
 .SudokuSolveButton {
+   
     background-color: transparent;
     border: 1px solid #ccc;
     color: rgb(116, 209, 54);
@@ -22,6 +23,7 @@
 }
 
 .SudokuSolveButtonDisable {
+ 
     background-color: transparent;
     border: 1px solid #ccc;
     outline: none;
@@ -36,6 +38,28 @@
     cursor: not-allowed;
     
 }
+
+.ParagrafDiv {
+    display: flex;
+   width: 100%;
+   height: 50px;
+   flex-direction: row
+  
+}
+
+.ParagrafDiv p{
+    position: relative;
+    left: 1100px;
+    font-weight: bold;
+}
+
+.ParagrafDiv a{
+    position: relative;
+    top: 16px;
+    left: 1115px;
+    font-weight: bold;
+}
+
 
 /* .SudokuButton button {
     display: flex;

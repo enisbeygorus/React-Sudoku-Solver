@@ -31,7 +31,9 @@ class PlaySudoku extends Component {
                 [0,0,4,3,2,0,0,0,8],
                 [0,0,0,0,0,0,0,7,0],
                 [0,0,0,1,5,0,4,0,0],
-                [0,6,0,0,0,0,2,0,3]],    
+                [0,6,0,0,0,0,2,0,3]],
+              
+             solvedPuzzle:[],   
             
             loading: false,
             changeColorArr: [],
@@ -46,21 +48,59 @@ class PlaySudoku extends Component {
             turnToRedBorder: [],
             inValidPuzzle: false,
             playGame: true,
-            arrayOfReadOnly: []
+            arrayOfReadOnly: [],
+            arrayOfWriteOnly: []
             
     }
 
     componentDidMount() {
         const tempPuzzle = this.stringToArray();
         const tempReadOnlyArr = this.takeIndexToReadOnly(tempPuzzle);
+        const tempWriteOnlyArr = this.takeIndexToWriteOnly(tempPuzzle)
         
         if(this.state.arrayOfReadOnly !== tempReadOnlyArr){
             this.setState({arrayOfReadOnly: tempReadOnlyArr})
         }
 
+        if(this.state.arrayOfWriteOnly !== tempWriteOnlyArr){
+            this.setState({arrayOfWriteOnly: tempWriteOnlyArr})
+        }
+
         if(this.state.puzzle !== tempPuzzle && this.state.copyPuzzle !== tempPuzzle) {
             this.setState({puzzle: tempPuzzle, copyPuzzle: tempPuzzle })
         }
+
+        const transformedPuzzle = this.merged(this.arrayClone(tempPuzzle)).toString()
+      
+        const solvedPuzzle = search(parse_grid(transformedPuzzle))
+
+        let tempArray = this.transformObjecToArray(solvedPuzzle);
+        
+       
+            if(this.state.solvedPuzzle !== tempArray[0] ){
+                this.setState({solvedPuzzle: tempArray[0]})
+            }
+        
+       
+    }
+
+
+
+    componentDidUpdate(){
+        const statePuzzle = this.state.puzzle
+        const solvedPuzzle = this.state.solvedPuzzle
+        
+        console.log(solvedPuzzle.toString())
+        console.log('yes out of if Did ')
+        if(statePuzzle.toString() === solvedPuzzle.toString() && this.state.solved !== true) {
+            console.log('Did Mount')
+            this.setState({solved: true})
+        } 
+        // Burda sorun olabilir tekrar kontrol et
+        if(statePuzzle.toString() !== solvedPuzzle.toString() && this.state.solved !== false) {
+            console.log('Did Mount')
+            this.setState({solved: false})
+        } 
     }
 
     
@@ -91,10 +131,26 @@ class PlaySudoku extends Component {
 
     takeIndexToReadOnly = (array) => {
         let tempArr = []
+
         
         for(let i = 0; i < 9 ; i++) {
             for(let j = 0; j < 9; j++){
                 if(array[i][j] !== 0){
+                    tempArr.push(i,j)
+                }
+            }
+        }
+
+        return tempArr
+    }
+
+    takeIndexToWriteOnly = (array) => {
+        let tempArr = []
+
+        
+        for(let i = 0; i < 9 ; i++) {
+            for(let j = 0; j < 9; j++){
+                if(array[i][j] === 0){
                     tempArr.push(i,j)
                 }
             }
@@ -264,8 +320,7 @@ class PlaySudoku extends Component {
         const dataChangeColor = [];
         const copyPuzzle = this.arrayClone(this.state.copyPuzzle)
 
-        console.log(puzzle)
-         console.log(copyPuzzle)
+    
 
         for(let i = 0 ; i < copyPuzzle.length; i++) {
             for(let j = 0; j < puzzle.length; j++) {
@@ -274,7 +329,7 @@ class PlaySudoku extends Component {
                 }
             }
         }
-        console.log(dataChangeColor)
+       
         return dataChangeColor
   }
   
@@ -301,13 +356,43 @@ class PlaySudoku extends Component {
                 }
                 arr2.push(arr)
                 arr = this.takeIndexToMakeGreen(arr2);
-                this.setState({puzzle: arr2, changeColorArr: arr, solved: solved, inValidPuzzle: false})
-                return arr2;
+                
+                console.log(arr2)
+                console.log(this.merged(arr2).join(''))
+                //this.setState({solvedPuzzle: arr2, changeColorArr: arr, solved: solved, inValidPuzzle: false})
+                return [arr2, arr, solved, false];
         } 
              catch (err) {
                 console.log('there is error')
                 this.setState({inValidPuzzle: true})
             }
+}
+
+transformObjecToArray2 = (solvedPuzzle) => {
+    let counter = 0;
+    let arr = [];
+    let arr2= [];
+    let solved = true;
+    console.log(solvedPuzzle)
+   try {
+        for(let i in solvedPuzzle){
+            if(counter === 9) {
+                counter = 0;
+                arr2.push(arr)
+                arr = [];
+            }
+            arr.push(parseInt(solvedPuzzle[i]))
+            counter++
+        }
+        arr2.push(arr)
+        arr = this.takeIndexToMakeGreen(arr2);
+        //this.setState({puzzle: arr2, solvedPuzzle: arr2, changeColorArr: arr, solved: solved, inValidPuzzle: false})
+        return [arr2, arr, solved, false];
+} 
+     catch (err) {
+        console.log('there is error')
+        this.setState({inValidPuzzle: true})
+    }
 }
 
 
@@ -317,8 +402,7 @@ class PlaySudoku extends Component {
         this.setState({ performanceTime: performanceTime })
         const transformedPuzzle = this.merged(this.arrayClone(this.state.puzzle)).toString()
         const solvedPuzzle = search(parse_grid(transformedPuzzle))
-        this.setState()
-        this.transformObjecToArray(solvedPuzzle)
+        this.transformObjecToArray2(solvedPuzzle)
  }
 
 
@@ -329,17 +413,14 @@ class PlaySudoku extends Component {
         
         let errorParagraf = null;
         
-        let inValidParagraf = <p style={{margin: '10px 20%'}}></p>;
+        let solvedParagraf = <p style={{margin: '10px 20%'}}></p>;
 
-        let solvedParagraf = null
 
         if(this.state.solved) {
-            solvedParagraf = <p style={{margin: '0px 52px', whiteSpace: "nowrap"}}>Solved in <strong>{this.state.performanceTime} millisecond</strong></p>
+            solvedParagraf = <p style={{margin: '0px 52px 20px 52px', whiteSpace: "nowrap"}}><strong>Congratulations You Solved The Puzzle :)</strong></p>
         }
 
-        if(this.state.inValidPuzzle){
-            inValidParagraf = <p style={{margin: '0px 20% 10px 20%' , whiteSpace: "nowrap"}}><strong>Puzzle is not valid, Check inputs!</strong></p>
-        } 
+        
 
         if(this.state.displayError.length === 1) {
             errorParagraf = <p style={{whiteSpace: "nowrap"}}><strong>ERROR!: Duplicate in same {this.state.displayError[0]}</strong></p>
@@ -376,28 +457,34 @@ class PlaySudoku extends Component {
                         turnToRedBorder={this.state.turnToRedBorder}
                         isValid={this.state.isValid}
                         playGame={this.state.playGame}
-                        arrayOfReadOnly={this.state.arrayOfReadOnly}    />
+                        arrayOfReadOnly={this.state.arrayOfReadOnly}
+                        arrayOfWriteOnly={this.state.arrayOfWriteOnly}    />
           })
 
-          //let buttonSwitch =  <button className={classes.SudokuSolveButton} onClick={() => this.solve()} >Solve the Puzzle</button>
+          let buttonSwitch =  <button className={classes.SudokuSolveButton} onClick={() => this.solve()} >Solve the Puzzle</button>
 
-        //   if(!this.state.isValid) {
-        //       buttonSwitch = <button className={classes.SudokuSolveButtonDisable}  >Puzzle is not Valid !</button>
-        //   }
+          if(!this.state.isValid) {
+              buttonSwitch = <button className={classes.SudokuSolveButtonDisable}  >Puzzle is not Valid !</button>
+          }
 
         return (
-           
+           <React.Fragment>
             <div className={classes.Sudoku}>
-               {inValidParagraf}
-                <div>
-                {allCell}
-                </div>
-                <div><SudokuButtonRow tempValue={this.state.tempValue} clicked={this.buttonInputHandler}/></div>
-                {errorParagraf}
                 {solvedParagraf}
-                <p>test paragraf</p>
+                    <div>
+                        {allCell}
+                    </div>
+                    <div style={{display: 'flex'}}>
+                         <SudokuButtonRow tempValue={this.state.tempValue} clicked={this.buttonInputHandler}/>
+                    </div>
+                {errorParagraf}
+                {buttonSwitch}  
            </div>
-          
+           <div className={classes.ParagrafDiv}>
+                <p><strong>Source: </strong></p>
+                <a href="http://norvig.com/sudoku.html" target="_blank" rel='noreferrer noopener'>http://norvig.com/sudoku.html</a>
+           </div>
+          </React.Fragment> 
         )
     }
 }

@@ -25,6 +25,7 @@ class SudokuRow extends Component{
                 playGame={this.props.playGame}
                 arrayOfReadOnly={this.props.arrayOfReadOnly}
                 coordinate={this.props.coordinate}
+                arrayOfWriteOnly={this.props.arrayOfWriteOnly}
                 />
               )) }
          </div>

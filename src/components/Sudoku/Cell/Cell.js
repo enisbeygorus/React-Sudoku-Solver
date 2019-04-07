@@ -165,16 +165,17 @@ class Cell extends Component {
                     column={this.props.column}
                     row={this.props.row} />
               }
+            }
+            
 
               if(!this.props.isValid){
-
+                for(let i = 0; i< this.props.arrayOfReadOnly.length; i+=2){
                     for(let j = 0; j < this.props.turnToRedBorder.length; j+=2){
-                        
-                    
-                       
+
                         if(this.props.arrayOfReadOnly[i] === this.props.row && this.props.arrayOfReadOnly[i+1] === this.props.column &&
-                              this.props.turnToRedBorder[j] === this.props.row && this.props.turnToRedBorder[j+1] === this.props.column ){
-                                cell = <input  
+                        this.props.turnToRedBorder[j] === this.props.row && this.props.turnToRedBorder[j+1] === this.props.column ){
+                  
+                            cell = <input  
                                         readOnly={true}
                                         className={classes.InputInValid}
                                         onClick={this.props.clicked}
@@ -182,7 +183,9 @@ class Cell extends Component {
                                         value={emptyString}
                                         column={this.props.column}
                                         row={this.props.row} />
-               }
+ }  
+                      
+                            
 
                if((this.props.row === 2  || this.props.row === 5) && this.props.arrayOfReadOnly[i] === this.props.row && this.props.arrayOfReadOnly[i+1] === this.props.column &&
                this.props.turnToRedBorder[j] === this.props.row && this.props.turnToRedBorder[j+1] === this.props.column){
@@ -197,12 +200,26 @@ class Cell extends Component {
                }
   
   }
-   
-                    
+}
+                for(let i = 0; i< this.props.arrayOfWriteOnly.length; i+=2){
+                    for(let j = 0; j < this.props.turnToRedBorder.length; j+=2){
+                        if(this.props.arrayOfWriteOnly[i] === this.props.row && this.props.arrayOfWriteOnly[i+1] === this.props.column &&
+                            this.props.turnToRedBorder[j] === this.props.row && this.props.turnToRedBorder[j+1] === this.props.column ){
+                      
+                                cell = <input  
+                                            className={classes.InputInValid}
+                                            onClick={this.props.clicked}
+                                            onChange={this.props.changed}
+                                            value={emptyString}
+                                            column={this.props.column}
+                                            row={this.props.row} />
+     }  
+                    }
+                }
   
             }
 
-          }
+          
 
     }
 

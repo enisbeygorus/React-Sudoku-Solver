@@ -336,17 +336,24 @@ class Sudoku extends Component {
           }
 
         return (
-           
+            <React.Fragment>
             <div className={classes.Sudoku}>
-               {inValidParagraf}
-                <div>
-                {allCell}
-                </div>
-                <div><SudokuButtonRow tempValue={this.state.tempValue} clicked={this.buttonInputHandler}/></div>
-                {errorParagraf}
-                {buttonSwitch}
-                {solvedParagraf}
-           </div>
+                    {inValidParagraf}
+                        <div>
+                             {allCell}
+                        </div>
+                        <div style={{display: 'flex'}}>
+                           <SudokuButtonRow tempValue={this.state.tempValue} clicked={this.buttonInputHandler}/>
+                        </div>
+                    {errorParagraf}
+                    {buttonSwitch}
+                    {solvedParagraf}
+            </div>
+            <div className={classes.ParagrafDiv}>
+                <p><strong>Source: </strong></p>
+                <a href="http://norvig.com/sudoku.html" target="_blank" rel='noreferrer noopener'>http://norvig.com/sudoku.html</a>
+            </div>
+          </React.Fragment>
           
         )
     }
