@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import SudokuRow from './SudokuRow/SudokuRow'
-import classes from './Sudoku.css'
+import SudokuRow from './SudokuRow/SudokuRow';
+import classes from './Sudoku.css';
 import SudokuButtonRow from './SudokuButtonRow/SudokuButtonRow';
 import { parse_grid, search, performanceTimer } from './SudokuAlgorithm';
-import { puzzles } from './RandomSudokuPuzzle'
+import { puzzles } from './RandomSudokuPuzzle';
 import axios from '../../axios-solved';
-import withErrorHandler from '../../HoC/withErrorHandler/withErrorHandler'
+import withErrorHandler from '../../HoC/withErrorHandler/withErrorHandler';
+import Spinner from '../UI/Spinner/Spinner';
+import Modal from '../UI/Modal/Modal';
 
 class PlaySudoku extends Component {
    
@@ -51,7 +53,10 @@ class PlaySudoku extends Component {
             playGame: true,
             arrayOfReadOnly: [],
             arrayOfWriteOnly: [],
-            fetchedPuzzles:[]
+            fetchedPuzzles:[],
+            solutionExist: null,
+            error: false,
+
             
     }
 
@@ -59,7 +64,9 @@ class PlaySudoku extends Component {
 
         this._isMounted = true;
 
-        const tempPuzzle = this.stringToArray();
+        const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)]
+
+        const tempPuzzle = this.stringToArray(randomPuzzle);
         const tempReadOnlyArr = this.takeIndexToReadOnly(tempPuzzle);
         const tempWriteOnlyArr = this.takeIndexToWriteOnly(tempPuzzle)
         
@@ -85,6 +92,7 @@ class PlaySudoku extends Component {
             if(this.state.solvedPuzzle !== tempArray[0] ){
                 this.setState({solvedPuzzle: tempArray[0]})
             }
+
             if(this.state.fetchedPuzzle !== []){
                 axios.get('/solved.json')
                 .then(res => {
@@ -96,7 +104,7 @@ class PlaySudoku extends Component {
                             id: key
                         })
                     }
-                    console.log(fetchedPuzzles)
+                    
                     this.setState({ fetchedPuzzles: fetchedPuzzles})
                         }
                     
@@ -128,12 +136,34 @@ class PlaySudoku extends Component {
         } 
     }
 
+    testFunctionForExistedData = () => {
+        const stringPuzzle ="010000020003000400000506000004070800020000050008090300000402000009000700050000060"
+        const tempPuzzle = this.stringToArray(stringPuzzle);
+        const tempReadOnlyArr = this.takeIndexToReadOnly(tempPuzzle);
+        const tempWriteOnlyArr = this.takeIndexToWriteOnly(tempPuzzle)
+
+        this.setState({
+            arrayOfReadOnly: tempReadOnlyArr, 
+            arrayOfWriteOnly: tempWriteOnlyArr,
+            puzzle: tempPuzzle,
+            copyPuzzle: tempPuzzle})
+
+            const transformedPuzzle = this.merged(this.arrayClone(tempPuzzle)).toString()
+      
+        const solvedPuzzle = search(parse_grid(transformedPuzzle))
+
+        let tempArray = this.transformObjecToArray(solvedPuzzle);
+
+        console.log('this is temp array', tempArray)
+
+        this.setState({solvedPuzzle: tempArray[0]})
+    }
     
 
    
-    stringToArray = () => {
-        //const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)]
-        const randomPuzzle ="010000020003000400000506000004070800020000050008090300000402000009000700050000060"
+    stringToArray = (randomPuzzle) => {
+       // const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)]
+        //const randomPuzzle ="010000020003000400000506000004070800020000050008090300000402000009000700050000060"
         
       
         let tempStr;
@@ -423,21 +453,23 @@ transformObjecToArray2 = (solvedPuzzle) => {
 }
 
 saveThePuzzle = () => {
-   
+    this.setState({loading: true})
     for(let i = 0; i < this.state.fetchedPuzzles.length; i++) {
         console.log(this.state.fetchedPuzzles[i].puzzle.toString(),'***',this.state.copyPuzzle.toString())
         if(this.state.fetchedPuzzles[i].puzzle.toString() === this.state.copyPuzzle.toString()){
+            this.setState({loading: false , solutionExist: true, error: false})
+            console.log('existed puzzles')
             return true;
-        } else {
-            const solvedPuzzle = {
-                puzzle: this.state.copyPuzzle,
-                solution: this.state.puzzle
-            }
-            axios.post('/solved.json', solvedPuzzle)
-                .then(response => console.log(response))
-                .catch(error => console.log(error))
-        }
+        } 
     }
+
+    const solvedPuzzle = {
+        puzzle: this.state.copyPuzzle,
+        solution: this.state.puzzle
+    }
+    axios.post('/solved.json', solvedPuzzle)
+        .then(response => this.setState({loading: false, solutionExist: false, error: false}))
+        .catch(error => this.setState({loading: false, error: true}))
 
     
 }
@@ -452,10 +484,13 @@ saveThePuzzle = () => {
         this.transformObjecToArray2(solvedPuzzle)
  }
 
+ spinnerConfirmedHandler = () => {
+    this.setState({loading: null, solutionExist: null})
+}
+
 
     render () {
        
-        console.log(this.state.fetchedPuzzles)
 
         
         
@@ -464,6 +499,26 @@ saveThePuzzle = () => {
         let solvedParagraf = <p style={{margin: '10px 20%'}}></p>;
 
         let saveSolution;
+
+        let spinner = null
+
+        if(this.state.loading){
+            spinner =   <Modal show={this.state.loading} modalClosed={this.spinnerConfirmedHandler}>
+                         <Spinner />
+                        </Modal>  
+        }
+         if(!this.state.loading && this.state.solutionExist === false){
+            spinner = <Modal show={this.state.solutionExist === false} modalClosed={this.spinnerConfirmedHandler}>
+                        Puzzle and Solution Saved in 'Solved Puzzle' :)
+                     </Modal> 
+        }  if (!this.state.loading && this.state.solutionExist === true){
+            spinner = <Modal show={this.state.solutionExist === true} modalClosed={this.spinnerConfirmedHandler}>
+                        Puzzle and Solution Already exits in 'Solved Puzzle'
+                     </Modal> 
+        } 
+         if(!this.state.loading && this.state.solutionExist === null){
+            spinner = null
+        }
 
         if(this.state.solved){
             saveSolution = <button className={classes.SudokuSolveButton} onClick={this.saveThePuzzle}>Save Puzzle and Solution</button>
@@ -527,6 +582,7 @@ saveThePuzzle = () => {
 
         return (
            <React.Fragment>
+               {spinner}
             <div className={classes.Sudoku}>
                 {solvedParagraf}
                     <div>
@@ -536,6 +592,7 @@ saveThePuzzle = () => {
                          <SudokuButtonRow tempValue={this.state.tempValue} clicked={this.buttonInputHandler}/>
                     </div>
                 {errorParagraf}
+                <button onClick={this.testFunctionForExistedData}> Test Button</button>
                 {buttonSwitch}
                 {saveSolution}  
            </div>
