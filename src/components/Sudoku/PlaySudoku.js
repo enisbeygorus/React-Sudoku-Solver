@@ -4,11 +4,12 @@ import classes from './Sudoku.css'
 import SudokuButtonRow from './SudokuButtonRow/SudokuButtonRow';
 import { parse_grid, search, performanceTimer } from './SudokuAlgorithm';
 import { puzzles } from './RandomSudokuPuzzle'
-
+import axios from '../../axios-solved';
+import withErrorHandler from '../../HoC/withErrorHandler/withErrorHandler'
 
 class PlaySudoku extends Component {
    
-  
+    _isMounted = false;
     
         state={
             puzzle:
@@ -49,11 +50,15 @@ class PlaySudoku extends Component {
             inValidPuzzle: false,
             playGame: true,
             arrayOfReadOnly: [],
-            arrayOfWriteOnly: []
+            arrayOfWriteOnly: [],
+            fetchedPuzzles:[]
             
     }
 
     componentDidMount() {
+
+        this._isMounted = true;
+
         const tempPuzzle = this.stringToArray();
         const tempReadOnlyArr = this.takeIndexToReadOnly(tempPuzzle);
         const tempWriteOnlyArr = this.takeIndexToWriteOnly(tempPuzzle)
@@ -80,25 +85,45 @@ class PlaySudoku extends Component {
             if(this.state.solvedPuzzle !== tempArray[0] ){
                 this.setState({solvedPuzzle: tempArray[0]})
             }
-        
+            if(this.state.fetchedPuzzle !== []){
+                axios.get('/solved.json')
+                .then(res => {
+                        if(this._isMounted){
+                            const fetchedPuzzles = [];
+                    for(let key in res.data){
+                        fetchedPuzzles.push({
+                            ...res.data[key],
+                            id: key
+                        })
+                    }
+                    console.log(fetchedPuzzles)
+                    this.setState({ fetchedPuzzles: fetchedPuzzles})
+                        }
+                    
+                })
+                .catch(err => {
+                    console.log(err)
+                    //this.setState({loading:false})
+                })
+            }
+          
        
     }
 
-
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
 
     componentDidUpdate(){
         const statePuzzle = this.state.puzzle
         const solvedPuzzle = this.state.solvedPuzzle
         
-        console.log(solvedPuzzle.toString())
-        console.log('yes out of if Did ')
-        if(statePuzzle.toString() === solvedPuzzle.toString() && this.state.solved !== true) {
-            console.log('Did Mount')
+        if(statePuzzle.toString() === solvedPuzzle.toString() && this.state.solved !== true) {  
             this.setState({solved: true})
         } 
-        // Burda sorun olabilir tekrar kontrol et
+    
         if(statePuzzle.toString() !== solvedPuzzle.toString() && this.state.solved !== false) {
-            console.log('Did Mount')
+           
             this.setState({solved: false})
         } 
     }
@@ -107,7 +132,8 @@ class PlaySudoku extends Component {
 
    
     stringToArray = () => {
-        const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)]
+        //const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)]
+        const randomPuzzle ="010000020003000400000506000004070800020000050008090300000402000009000700050000060"
         
       
         let tempStr;
@@ -386,13 +412,34 @@ transformObjecToArray2 = (solvedPuzzle) => {
         }
         arr2.push(arr)
         arr = this.takeIndexToMakeGreen(arr2);
-        //this.setState({puzzle: arr2, solvedPuzzle: arr2, changeColorArr: arr, solved: solved, inValidPuzzle: false})
+        arr2[8][8] = 0;
+        this.setState({puzzle: arr2})
         return [arr2, arr, solved, false];
 } 
      catch (err) {
         console.log('there is error')
         this.setState({inValidPuzzle: true})
     }
+}
+
+saveThePuzzle = () => {
+   
+    for(let i = 0; i < this.state.fetchedPuzzles.length; i++) {
+        console.log(this.state.fetchedPuzzles[i].puzzle.toString(),'***',this.state.copyPuzzle.toString())
+        if(this.state.fetchedPuzzles[i].puzzle.toString() === this.state.copyPuzzle.toString()){
+            return true;
+        } else {
+            const solvedPuzzle = {
+                puzzle: this.state.copyPuzzle,
+                solution: this.state.puzzle
+            }
+            axios.post('/solved.json', solvedPuzzle)
+                .then(response => console.log(response))
+                .catch(error => console.log(error))
+        }
+    }
+
+    
 }
 
 
@@ -408,12 +455,23 @@ transformObjecToArray2 = (solvedPuzzle) => {
 
     render () {
        
-        this.stringToArray(puzzles[0]);
+        console.log(this.state.fetchedPuzzles)
+
         
         
         let errorParagraf = null;
         
         let solvedParagraf = <p style={{margin: '10px 20%'}}></p>;
+
+        let saveSolution;
+
+        if(this.state.solved){
+            saveSolution = <button className={classes.SudokuSolveButton} onClick={this.saveThePuzzle}>Save Puzzle and Solution</button>
+        } else {
+            saveSolution = <button className={classes.SudokuSolveButtonDisable} >Save Puzzle and Solution</button>
+        }
+        
+        
 
 
         if(this.state.solved) {
@@ -478,8 +536,13 @@ transformObjecToArray2 = (solvedPuzzle) => {
                          <SudokuButtonRow tempValue={this.state.tempValue} clicked={this.buttonInputHandler}/>
                     </div>
                 {errorParagraf}
-                {buttonSwitch}  
+                {buttonSwitch}
+                {saveSolution}  
            </div>
+           <div className={classes.GithubDiv}>
+                <p><strong>Created By:</strong></p>
+                <a href="https://github.com/Enisbeygorus/React-Sudoku-Solver" target="_blank" rel="noreferrer noopener">https://github.com/Enisbeygorus/React-Sudoku-Solver</a>
+            </div>
            <div className={classes.ParagrafDiv}>
                 <p><strong>Source: </strong></p>
                 <a href="http://norvig.com/sudoku.html" target="_blank" rel='noreferrer noopener'>http://norvig.com/sudoku.html</a>
@@ -490,4 +553,4 @@ transformObjecToArray2 = (solvedPuzzle) => {
 }
 
 
-export default PlaySudoku;
+export default withErrorHandler(PlaySudoku, axios);

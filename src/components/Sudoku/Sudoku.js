@@ -8,21 +8,22 @@ import { puzzles } from './RandomSudokuPuzzle'
 
 
 
+
 class Sudoku extends Component {
 
     
         state={
             puzzle:
         [
-            [1, 0, 3, 0, 0, 0, 0, 8, 4],
-            [0, 0, 6, 0, 4, 8, 0, 0, 0],
-            [0, 4, 0, 0, 0, 0, 0, 0, 0],
-            [2, 0, 0, 0, 9, 6, 1, 0, 0],
-            [0, 9, 0, 8, 0, 1, 0, 4, 0],
-            [0, 0, 4, 3, 2, 0, 0, 0, 8],
-            [0, 0, 0, 0, 0, 0, 0, 7, 0],
-            [0, 0, 0, 1, 5, 0, 4, 0, 0],
-            [0, 6, 0, 0, 0, 0, 2, 0, 3],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ],
              copyPuzzle:[[1,0,3,0,0,0,0,8,4],
                 [0,0,6,0,4,8,0,0,0],
@@ -256,6 +257,8 @@ class Sudoku extends Component {
 
 
 
+
+
     solve = () => {
         const copyArray = this.arrayClone(this.state.puzzle)
         
@@ -266,6 +269,8 @@ class Sudoku extends Component {
         this.setState({copyPuzzle: copyArray},() => this.transformObjecToArray(solvedPuzzle) )
         //this.transformObjecToArray(solvedPuzzle)
  }
+
+
 
 
     render () {
@@ -349,9 +354,13 @@ class Sudoku extends Component {
                     {buttonSwitch}
                     {solvedParagraf}
             </div>
+            <div className={classes.GithubDiv}>
+            <p><strong>Created By:</strong></p>
+            <a href="https://github.com/Enisbeygorus/React-Sudoku-Solver" target="_blank" rel="noreferrer noopener">https://github.com/Enisbeygorus/React-Sudoku-Solver</a>
+            </div>
             <div className={classes.ParagrafDiv}>
                 <p><strong>Source: </strong></p>
-                <a href="http://norvig.com/sudoku.html" target="_blank" rel='noreferrer noopener'>http://norvig.com/sudoku.html</a>
+                <a href="http://norvig.com/sudoku.html" target="_blank" rel="noreferrer noopener">http://norvig.com/sudoku.html</a>
             </div>
           </React.Fragment>
           

@@ -49,17 +49,36 @@
 
 .ParagrafDiv p{
     position: relative;
-    left: 1100px;
+    left: 900px;
     font-weight: bold;
 }
 
 .ParagrafDiv a{
     position: relative;
     top: 16px;
-    left: 1115px;
+    left: 945px;
     font-weight: bold;
 }
 
+.GithubDiv {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    flex-direction: row
+}
+
+.GithubDiv p{
+    position: relative;
+    left: 900px;
+    font-weight: bold;
+}
+
+.GithubDiv a{
+    position: relative;
+    top: 16px;
+    left: 915px;
+    font-weight: bold;
+}
 
 /* .SudokuButton button {
     display: flex;
